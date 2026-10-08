@@ -1,0 +1,101 @@
+version: 2
+
+project_name: depscout
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: depscout
+    main: .
+    binary: depscout
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w -X main.Version={{.Version}}
+
+archives:
+  - id: default
+    ids:
+      - depscout
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+sboms:
+  - id: archive
+    artifacts: archive
+    documents:
+      - "{{ .ArtifactName }}.spdx.json"
+    cmd: syft
+    args:
+      - "$artifact"
+      - "--output"
+      - "spdx-json=$document"
+
+signs:
+  - id: checksums
+    cmd: cosign
+    signature: "${artifact}.sigstore.json"
+    artifacts: checksum
+    args:
+      - sign-blob
+      - "--yes"
+      - "--bundle=${signature}"
+      - "${artifact}"
+
+# Homebrew Cask → AESalnikov/homebrew-tap (нужен secret HOMEBREW_TAP_GITHUB_TOKEN).
+# Установка: brew install --cask AESalnikov/tap/depscout
+homebrew_casks:
+  - name: depscout
+    ids:
+      - default
+    homepage: "https://github.com/AESalnikov/depscout"
+    description: "Scout and update dependency versions in Gradle and Maven projects"
+    binaries:
+      - depscout
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/depscout"]
+          end
+    commit_msg_template: "Update depscout to {{ .Tag }}"
+    directory: Casks
+    repository:
+      owner: AESalnikov
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    commit_author:
+      name: depscout-release
+      email: "41898282+github-actions[bot]@users.noreply.github.com"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+
+release:
+  draft: false

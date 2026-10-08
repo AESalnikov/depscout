@@ -1,0 +1,13 @@
+# Mutation testing (go-gremlins). Запуск: make mutate
+unleash:
+  exclude-files:
+    - "_test\\.go$"
+    - "fuzz_test\\.go$"
+  threshold-efficacy: 55
+  threshold-mcover: 40
+  workers: 1
+  test-cpu: 1
+  timeout-coefficient: 10
+  conditionals-boundary: false
+  invert-negatives: false
+  increment-decrement: false

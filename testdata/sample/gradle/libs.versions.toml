@@ -1,0 +1,14 @@
+# Вымышленный Version Catalog OrbitCart (для примеров/тестов depscout).
+
+[versions]
+orbitCore = "2.4.1"
+shadow = "8.1.1"
+
+[libraries]
+orbit-core = { module = "io.orbitcart.core:orbit-core", version.ref = "orbitCore" }
+orbit-events = { group = "io.orbitcart.events", name = "orbit-events", version.ref = "orbitCore" }
+metrics-starter = { module = "io.orbitcart.observability:metrics-starter", version = "3.1.0" }
+
+[plugins]
+conventions = { id = "io.orbitcart.conventions", version.ref = "orbitCore" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }

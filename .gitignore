@@ -1,0 +1,29 @@
+# binaries
+/depscout
+/depscout-*
+*.exe
+*.test
+*.out
+
+# coverage / profiling
+coverage.out
+coverage.html
+*.coverprofile
+cpu.prof
+mem.prof
+/tmp/
+
+# goreleaser
+/dist/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# local env (never commit secrets)
+.env
+.env.*
+!.env.example

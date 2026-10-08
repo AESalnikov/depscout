@@ -1,0 +1,14 @@
+// Golden fixture for Gradle parsers (OrbitCart fictional sample).
+
+plugins {
+    id "io.orbitcart.conventions" version "2.1.0"
+    id("io.orbitcart.openapi") version "1.4.2"
+    id("com.github.johnrengelman.shadow") version("8.1.1")
+}
+
+dependencies {
+    implementation "io.orbitcart.core:orbit-core:${orbitCoreVersion}"
+    implementation 'io.orbitcart.events:orbit-events:${orbitEventsVersion}'
+    implementation "com.ex:inline-lib:1.0.0"
+    testImplementation "io.orbitcart.testkit:orbit-testkit:${orbitCoreVersion}"
+}

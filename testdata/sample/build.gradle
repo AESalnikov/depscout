@@ -1,0 +1,26 @@
+// Вымышленный Gradle-проект OrbitCart (только для unit-тестов depscout).
+// Никакой связи с реальными корпоративными репозиториями.
+
+plugins {
+    id "io.orbitcart.conventions" version "2.1.0"
+    id "io.orbitcart.openapi" version "1.4.2"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "org.jetbrains.kotlin.jvm" version "2.1.0"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    implementation platform("io.orbitcart.bom:orbit-bom:${orbitCoreVersion}")
+
+    implementation "io.orbitcart.core:orbit-core:${orbitCoreVersion}"
+    implementation "io.orbitcart.events:orbit-events:${orbitEventsVersion}"
+    implementation "io.orbitcart.catalog:catalog-client:${catalogClientVersion}"
+    implementation "io.orbitcart.observability:metrics-starter:${metricsStarterVersion}"
+
+    testImplementation "io.orbitcart.testkit:orbit-testkit:${orbitCoreVersion}"
+}
